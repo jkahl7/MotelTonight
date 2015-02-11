@@ -8,7 +8,8 @@
 
 #import "RoomViewController.h"
 #import "Room.h"
-#import "AppDelegate.h"
+//#import "AppDelegate.h"
+#import "ReservationViewController.h"
 
 
 @interface RoomViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -27,8 +28,8 @@
   self.tableView.delegate   = self;
   
   [self.tableView reloadData];
-  
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -40,12 +41,22 @@
 {
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"CELL" forIndexPath:indexPath];
   Room *room = self.rooms[indexPath.row];
-  
-  NSLog(@"%d", indexPath.row);
-  
+    
   cell.textLabel.text = [NSString stringWithFormat:@"%@", room.number];
   
   return cell;
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  ReservationViewController *toVC = [[ReservationViewController alloc] init];
+  
+  toVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ReservationVC"];
+  
+  toVC.selectedRoom = self.rooms[indexPath.row];
+  
+  [self.navigationController pushViewController:toVC animated:true]; 
 }
 
 
