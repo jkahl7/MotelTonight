@@ -28,9 +28,6 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-  
-  AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-  self.context = appDelegate.managedObjectContext;
 }
 
 
@@ -46,9 +43,9 @@
   fetchRequest.predicate = predicate;
   
   
-  
+  //makes a fetch against the reservation entity / criteria used to retrieve data from a persistent store.
   NSFetchRequest *fetchReservation = [[NSFetchRequest alloc] initWithEntityName:@"Reservation"];
-  
+  //used to define logical conditions used to constrain a search either for a fetch or for in-memory filtering
   NSPredicate *reservationPredicate = [NSPredicate predicateWithFormat:@"room.hotel.name MATCHES %@ && startDate >= %@ || endDate <= %@", selectedHotel, self.arrivalDate.date, self.departureDate.date];
   
   fetchReservation.predicate = reservationPredicate;
@@ -56,6 +53,7 @@
   NSError *fetchError;
   
   NSArray *results = [self.context executeFetchRequest:fetchReservation error:&fetchError];
+  
   
   NSMutableArray *rooms = [[NSMutableArray alloc] init];
   
@@ -67,7 +65,7 @@
   
   
   NSFetchRequest *fetchSpecific = [[NSFetchRequest alloc] initWithEntityName:@"Room"];
-  
+  //searches within the selectedHotel for rooms that are not in our rooms array (above)
   NSPredicate *roomsPredicate = [NSPredicate predicateWithFormat:@"hotel.name MATCHES %@ AND NOT (self IN %@)", selectedHotel, rooms];
   
   fetchSpecific.predicate = roomsPredicate;

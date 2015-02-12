@@ -52,9 +52,10 @@
 {
   ReservationViewController *toVC = [[ReservationViewController alloc] init];
   
-  toVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ReservationVC"];
+  toVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ReservationListVC"];
   
   toVC.selectedRoom = self.rooms[indexPath.row];
+  NSLog(@"rooms passed: %@", self.rooms[indexPath.row]);
   
   [self.navigationController pushViewController:toVC animated:true]; 
 }

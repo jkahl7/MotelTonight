@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Reservation.h"
 
 @interface AvailabilityViewController : UIViewController
+
+@property (strong, nonatomic) Reservation *selectedReservation;
 
 @end

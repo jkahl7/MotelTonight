@@ -9,7 +9,9 @@
 #import "ReservationViewController.h"
 #import "Reservation.h"
 #import "Guest.h"
+#import "HotelService.h"
 #import "AvailabilityViewController.h"
+
 
 @interface ReservationViewController ()
 
@@ -25,42 +27,31 @@
 
 @implementation ReservationViewController
 
+
 - (IBAction)bookDates:(UIButton *)sender
 {
-  //instantiates a new Reservation Object inside of the room object which was passed to this VC
-  Reservation *reservation = [NSEntityDescription insertNewObjectForEntityForName:@"Reservation"
-                                                           inManagedObjectContext:self.selectedRoom.managedObjectContext];
+  //TODO: somehow I need to add a reservation here - or confirm that it is being done
+  NSManagedObjectContext *context = [[HotelService sharedService] coreDataStack].managedObjectContext;
   
-  reservation.room      = self.selectedRoom;
-  reservation.endDate   = self.departureDate.date;
-  reservation.startDate = self.arrivalDate.date;
-
   Guest *guest = [NSEntityDescription insertNewObjectForEntityForName:@"Guest"
-                                               inManagedObjectContext:self.selectedRoom.managedObjectContext];
- 
+                                               inManagedObjectContext:context];
   guest.firstName = self.firstName.text;
   guest.lastName  = self.lastName.text;
   
-  reservation.guest = guest;
   
-  NSLog(@"%lu",(unsigned long)self.selectedRoom.reservation.count);
+  [[HotelService sharedService] bookReservationForGuest:guest
+                                                ForRoom:self.selectedRoom
+                                            arrivalDate:self.arrivalDate.date
+                                          departureDate:self.departureDate.date];
   
-  NSError *saveError;
-  [self.selectedRoom.managedObjectContext save:&saveError];
   
-  if (saveError)
-  {
-    NSLog(@"%@",saveError);
-  }
-  
-  AvailabilityViewController *toVC = [[AvailabilityViewController alloc] init];
-  
-  toVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AvailabilityVC"];
-  
-  [self.navigationController pushViewController:toVC animated:true];
+  [self.navigationController dismissViewControllerAnimated:false completion:nil];
+  NSLog(@"first hit");
+  [self dismissViewControllerAnimated:false completion:nil];
+  NSLog(@"second hit");
+  [[self presentingViewController] dismissViewControllerAnimated:false completion:nil];
   
 }
-
 
 
 - (void)viewDidLoad

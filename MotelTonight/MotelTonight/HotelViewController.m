@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "Hotel.h"
 #import "RoomViewController.h"
+#import "HotelService.h"
 
 @interface HotelViewController() <UITableViewDataSource, UITableViewDelegate>
 
@@ -26,16 +27,14 @@
   self.tableView.dataSource = self;
   self.tableView.delegate   = self;
   
-  //need to grab a refrence to the AppDelegate - a shared instance
-  AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-  // grab a refrence to the contextManager in appDelegate
-  NSManagedObjectContext *context = appDelegate.managedObjectContext;
-  
+  //creating a reference to the managedObjectContext in HotelService singleton
+  NSManagedObjectContext *context = [[HotelService sharedService] coreDataStack].managedObjectContext;
+
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Hotel"];
   
   NSError *fetchError;
   
-  NSArray *results = [context executeFetchRequest:fetchRequest error: &fetchError];
+  NSArray *results = [context executeFetchRequest:fetchRequest error:&fetchError];
   
   if (!fetchError)
   {

@@ -25,9 +25,9 @@
         <relationship name="reservation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Reservation" inverseName="room" inverseEntity="Reservation" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Hotel" positionX="-234" positionY="-148" width="128" height="103"/>
-        <element name="Room" positionX="-227" positionY="38" width="128" height="118"/>
         <element name="Guest" positionX="45" positionY="207" width="128" height="88"/>
+        <element name="Hotel" positionX="-234" positionY="-148" width="128" height="103"/>
         <element name="Reservation" positionX="7" positionY="38" width="128" height="103"/>
+        <element name="Room" positionX="-227" positionY="38" width="128" height="118"/>
     </elements>
 </model>
