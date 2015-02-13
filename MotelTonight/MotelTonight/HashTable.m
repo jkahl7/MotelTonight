@@ -1,0 +1,129 @@
+//
+//  HashTable.m
+//  MotelTonight
+//
+//  Created by Josh Kahl on 2/12/15.
+//  Copyright (c) 2015 Josh Kahl. All rights reserved.
+//
+
+#import "HashTable.h"
+#import "Bucket.h"
+
+@interface HashTable ()
+
+
+@property (nonatomic) NSInteger size;
+
+@property (strong, nonatomic) NSMutableArray *hashArray;
+
+
+@end
+
+@implementation HashTable
+
+
+- (instancetype)initWithSize:(NSInteger)size
+{
+  self = [super init];
+  if (self)
+  {
+    self.size = size;
+    self.hashArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < self.size; i++)
+    {
+      Bucket *bucket = [[Bucket alloc] init];
+      [self.hashArray addObject:bucket];
+    }
+  }
+  return self;
+}
+
+
+- (NSInteger)hash:(NSString *)key
+{
+  NSInteger total = 0;
+  
+  for (int i = 0; i < key.length; i++)
+  {
+    NSInteger ascii = [key characterAtIndex:i];
+    total += ascii;
+  }
+  NSInteger index = total % self.size;
+  return index;
+}
+
+
+- (void)setObject:(id)object forKey:(NSString *)key
+{
+  NSInteger index = [self hash:key];
+  Bucket *bucket  = [[Bucket alloc] init];
+  bucket.key      = key;
+  bucket.data     = object;
+  
+  [self removeObjectWithKey:key];
+  
+  Bucket *head = self.hashArray[index];
+  if (!head.data)
+  {
+    self.hashArray[index] = bucket;
+  } else {
+    bucket.next = head;
+    self.hashArray[index] = bucket;
+  }
+  
+}
+
+
+- (void)removeObjectWithKey:(NSString *)key
+{
+  NSInteger index = [self hash:key];
+  Bucket *previousBucket;
+  Bucket *bucket = self.hashArray[index];
+  while (bucket)
+  {
+    if ([key isEqualToString:bucket.key])
+    {
+      if (!previousBucket)
+      {
+        Bucket *nextBucket = bucket.next;
+        if (!nextBucket)
+        {
+          nextBucket = [Bucket new];
+        }
+        self.hashArray[index] = nextBucket;
+      } else {
+        previousBucket.next = bucket.next;
+      }
+      return;
+    }
+    previousBucket = bucket;
+    bucket = bucket.next;
+  }
+  return;
+}
+
+
+
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
