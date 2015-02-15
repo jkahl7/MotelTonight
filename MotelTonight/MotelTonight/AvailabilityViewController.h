@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Reservation.h"
+#import "Room.h"
 
 @interface AvailabilityViewController : UIViewController
 
-@property (strong, nonatomic) Reservation *selectedReservation;
+@property (strong, nonatomic) Room *selectedRoom;
 
 @end

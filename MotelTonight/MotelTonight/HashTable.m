@@ -39,6 +39,23 @@
   return self;
 }
 
+- (id)objectForKey:(NSString *)key
+{
+  NSInteger hashIndex = [self hash:key];
+  Bucket *bucket      = self.hashArray[hashIndex];
+  
+  while (bucket)
+  {
+    if ([bucket.key isEqualToString:key])
+    {
+      return bucket.data;
+    } else {
+      bucket = bucket.next;
+    }
+  }
+  return nil;
+}
+
 
 - (NSInteger)hash:(NSString *)key
 {

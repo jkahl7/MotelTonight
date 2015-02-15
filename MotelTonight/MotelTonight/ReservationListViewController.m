@@ -14,7 +14,9 @@
 @interface ReservationListViewController () <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+
 - (IBAction)addReservation:(UIBarButtonItem *)sender;
 
 @end
@@ -27,6 +29,7 @@
   [super viewDidLoad];
  
   self.tableView.dataSource              = self;
+  self.tableView.delegate                = self;
   self.fetchedResultsController.delegate = self;
   
   NSPredicate *predicate           = [NSPredicate predicateWithFormat:@"room == %@", self.selectedRoom];
@@ -42,6 +45,7 @@
                                                                         sectionNameKeyPath:nil
                                                                                  cacheName:nil];
   NSError *fetchError;
+  
   [self.fetchedResultsController performFetch:&fetchError];
   
   if (fetchError)
@@ -64,10 +68,10 @@
 
 
 - (void)controller:(NSFetchedResultsController *)controller
-  didChangeObject:(id)anObject
-      atIndexPath:(NSIndexPath *)indexPath
-    forChangeType:(NSFetchedResultsChangeType)type
-     newIndexPath:(NSIndexPath *)newIndexPath
+   didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath
+     forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
 {
   switch (type)
   {
@@ -119,28 +123,33 @@
 
 
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CELL"
                                                           forIndexPath:indexPath];
   [self configureCell:cell atIndexPath:indexPath];
+  
   return cell;
 }
 
 
 #pragma Navigation
-/*
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
   AvailabilityViewController *toVC = [[AvailabilityViewController alloc] init];
  
-  toVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AvailibilityVC"];
+  toVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AvailabilityVC"];
   
-  toVC.selectedReservation = self.
-
+  NSArray *guestFinder = [self.selectedRoom.reservation allObjects];
+  
+  NSLog(@"%@", guestFinder);
+  
+  toVC.selectedRoom = self.selectedRoom;
+  
+  [self.navigationController pushViewController:toVC animated:true];
 }
-*/
+
 
 - (IBAction)addReservation:(UIBarButtonItem *)sender
 {
